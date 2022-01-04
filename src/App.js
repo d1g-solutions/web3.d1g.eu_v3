@@ -6,7 +6,7 @@ import "./styles.css";
 import { Box, Button } from "@material-ui/core";
 import { useState } from "react";
 import web3 from "web3";
-import NFT_ERC731 from "/src/NFT_D1G_OpenZeppelin_ERC721.json";
+import NFT_ERC731 from "./NFT_D1G_OpenZeppelin_ERC721.json";
 
 const { mnemonic, BSCSCANAPIKEY } = require("./env.json");
 

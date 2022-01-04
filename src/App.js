@@ -2,6 +2,7 @@
 //  - switch/add wallet
 //  - add token
 //  - incerc sa-l fac functional
+//  - ready for deployment via vercel
 import "./styles.css";
 import { Box, Button } from "@material-ui/core";
 import { useState } from "react";

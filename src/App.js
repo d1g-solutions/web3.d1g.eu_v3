@@ -1,6 +1,7 @@
 //20220104
 //  - switch/add wallet
 //  - add token
+//  - incerc sa-l fac functional
 import "./styles.css";
 import { Box, Button } from "@material-ui/core";
 import { useState } from "react";
@@ -58,7 +59,7 @@ function App() {
       const tokenSymbol = "D1G";
       const tokenDecimals = 18;
       const tokenImage =
-        "https://ipfs.io/ipfs/QmZ7ZNpQaqdsZP3R63r3hP9bbtSMMevGQWZ1WCaR5q2BsJ";
+        "https://ipfs.io/ipfs/QmQq66d95Gcsr4q2FpPUpi2ShU1DDqkng348N7tnq4YuqL";
 
       try {
         /*

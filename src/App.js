@@ -235,7 +235,7 @@ function App() {
 
       <Box mt={4}>
         <Button variant="contained" color="primary" onClick={getBalance}>
-          g=Get balance and log
+          Get balance and log
         </Button>
       </Box>
     </div>

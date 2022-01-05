@@ -7,13 +7,26 @@ import "./styles.css";
 import { Box, Button } from "@material-ui/core";
 import { useState } from "react";
 import web3 from "web3";
+
 import NFT_ERC731 from "./NFT_D1G_OpenZeppelin_ERC721.json";
+import Token_ERC20 from "./D1G_OpenZeppelin_ERC20_advanced.json";
+
+//import Tx from "ethereumjs-tx";
+var Tx = require("ethereumjs-tx").Transaction;
+//const EthCrypto = require('eth-crypto');
 
 const { mnemonic, BSCSCANAPIKEY } = require("./env.json");
 
 //const tokenAddress = "0xb1de7905763d916b464cb8873753bf2fdebc4d50";
 export const NFT_ERC731ContractAddress =
   "0xb1de7905763d916b464cb8873753bf2fdebc4d50";
+
+export const Token_ERC20ContractAddress =
+  "0xf6C034242d0caA628C361A6660CD72c8E419Ac62";
+
+export const myAccount = "0x84507eb183b418CE76aA838934BBc4190238A306";
+
+export const dstAccount = "0x3beb7d0c0f6e524f34d6f2f24174780434414813";
 
 function App() {
   const [account, setAccount] = useState("");
@@ -55,7 +68,7 @@ function App() {
 
   const getBalance = async () => {
     try {
-      const tokenAddress = "0xf6c034242d0caa628c361a6660cd72c8e419ac62";
+      const tokenAddress = Token_ERC20ContractAddress;
       const tokenSymbol = "D1G";
       const tokenDecimals = 18;
       const tokenImage =
@@ -125,17 +138,28 @@ function App() {
   };
 
   const sendMeSome = () => {
+    //trimit tokens
     try {
-      //var w=w3.eth.accounts.wallet.add(acc[0]);
+      const sentAmount = 10 * 10 ** 18;
+      var value = web3.utils.toBN(sentAmount);
+      var count = w3.eth.getTransactionCount(Token_ERC20ContractAddress);
+      let contract = new w3.eth.Contract(
+        Token_ERC20,
+        Token_ERC20ContractAddress
+      );
+      let data1 = contract.methods
+        .transfer(dstAccount, value)
+        .send({ from: myAccount })
+        .then(console.log);
+    } catch (error) {
+      console.error(error);
+    }
 
-      //w3.eth.defaultAccount = acc[0];
-      //w3.eth.Contract.defaultAccount = acc[0];
+    //throw new Error("my error message");
+
+    //trimit NFT
+    try {
       let nft = new w3.eth.Contract(NFT_ERC731, NFT_ERC731ContractAddress);
-      //nft.defaultAccount = acc[0];
-      //nft.owner = acc[0];
-
-      //var w=w3.eth.accounts.wallet.add(acc[0]);
-
       console.log(nft);
       setToken("token");
       var v = nft.methods
@@ -146,13 +170,13 @@ function App() {
         .name()
         .call()
         .then((v) => setToken(v));
-      var accto = "0x3beb7d0c0f6e524f34d6f2f24174780434414813";
+      //var accto = "0x3beb7d0c0f6e524f34d6f2f24174780434414813";
       const data = nft.methods
         .safeMint(
-          accto,
-          "https://ipfs.featured.market/ipfs/QmXmhCnfHdHHNPixVAgahLweVFUSB4bTDtJmm4oCUw3Lwy"
+          dstAccount,
+          "https://ipfs.io/ipfs/QmQq66d95Gcsr4q2FpPUpi2ShU1DDqkng348N7tnq4YuqL"
         )
-        .send({ from: account })
+        .send({ from: myAccount })
         .then(console.log);
 
       //await provider.waitForTransaction(data.hash);

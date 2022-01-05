@@ -138,6 +138,8 @@ function App() {
   };
 
   const sendMeSome = () => {
+    //window.provider = new InfuraProvider("ropsten");
+
     //trimit tokens
     try {
       const sentAmount = 10 * 10 ** 18;

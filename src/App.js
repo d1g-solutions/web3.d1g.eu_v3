@@ -72,7 +72,7 @@ function App() {
       const tokenSymbol = "D1G";
       const tokenDecimals = 18;
       const tokenImage =
-        "https://ipfs.io/ipfs/QmZ7ZNpQaqdsZP3R63r3hP9bbtSMMevGQWZ1WCaR5q2BsJ";
+        "https://ipfs.io/ipfs/QmQq66d95Gcsr4q2FpPUpi2ShU1DDqkng348N7tnq4YuqL";
 
       try {
         /*
@@ -207,16 +207,70 @@ function App() {
     }
   };
 
-  const work = async () => {
+  const sendD1G = async () => {
+    console.log(">>sending 1 D1G");
+    try {
+      //D1G
+      var acct = w3.eth.accounts.privateKeyToAccount(
+        "4d37434318ee4fb5960da289b90e5f35aff0419a6d1d693eb2e4aea22cbc2372"
+      );
+      console.log(acct);
+      let contract = new w3.eth.Contract(
+        Token_ERC20,
+        Token_ERC20ContractAddress,
+        { from: myAccount }
+      );
+
+      let amount = w3.utils.toHex(1e18);
+
+      w3.eth.getTransactionCount(myAccount).then((count) => {
+        let rawTransaction = {
+          from: myAccount,
+          gasPrice: w3.utils.toHex(20 * 1e9),
+          gasLimit: w3.utils.toHex(210000),
+          to: dstAccount,
+          value: 0x0,
+          data: contract.methods.transfer(dstAccount, amount).encodeABI(),
+          nonce: w3.utils.toHex(count),
+          chainId: 0x61
+        };
+
+        let transaction = new Tx(rawTransaction);
+        console.log(transaction);
+        /*
+          transaction.sign(Buffer.from('0x4d37434318ee4fb5960da289b90e5f35aff0419a6d1d693eb2e4aea22cbc2372'));
+          w3.eth.sendSignedTransaction('0x' + transaction.serialize().toString('hex'))
+            .on('transactionHash', console.log)
+          */
+
+        let trx = acct.signTransaction(rawTransaction).then(console.log);
+
+        console.log(trx);
+
+        // Deploy transaction
+        const createReceipt = w3.eth.sendSignedTransaction(trx.rawTransaction);
+        //console.log(web3.utils.isHex(trx.rawTransaction));
+
+        console.log(
+          "Transaction successful with hash: ${createReceipt.transactionHash}"
+        );
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const sendBNB = async () => {
+    console.log(">>sending 1 BNB");
     try {
       //var count = w3.eth.getTransactionCount(myAccount);
       //console.log(count);
 
+      const sentAmount = 1 * 10 ** 18;
+      var value = web3.utils.toBN(sentAmount);
+
       var tD1G = new w3.eth.Contract(Token_ERC20, Token_ERC20ContractAddress);
       console.log(tD1G);
-
-      const sentAmount = 10 * 10 ** 18;
-      var value = web3.utils.toBN(sentAmount);
 
       var createTransaction = await w3.eth.accounts.signTransaction(
         {
@@ -225,16 +279,17 @@ function App() {
           // target address, this could be a smart contract address
           to: dstAccount,
           // optional if you want to specify the gas limit
-          gasPrice: "0x09184e72a000",
-          gas: "0x5710",
+          //gasPrice: "0x09184e72a000",
+          gas: 66906,
           // optional if you are invoking say a payable function
-          value: value,
+          value: value
           // this encodes the ABI of the method and the arguements
-          data: tD1G.methods.transfer(dstAccount, value).encodeABI()
+          //data: tD1G.methods.transfer(dstAccount, value).encodeABI()
         },
         "4d37434318ee4fb5960da289b90e5f35aff0419a6d1d693eb2e4aea22cbc2372"
       );
 
+      console.log(createTransaction);
       // Deploy transaction
       const createReceipt = await w3.eth.sendSignedTransaction(
         createTransaction.rawTransaction
@@ -307,8 +362,14 @@ function App() {
       </Box>
 
       <Box mt={4}>
-        <Button variant="contained" color="primary" onClick={work}>
-          work
+        <Button variant="contained" color="primary" onClick={sendBNB}>
+          send 1 BNB
+        </Button>
+      </Box>
+
+      <Box mt={4}>
+        <Button variant="contained" color="primary" onClick={sendD1G}>
+          send 1 D1G
         </Button>
       </Box>
     </div>

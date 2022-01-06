@@ -71,8 +71,8 @@ function App() {
       const tokenAddress = Token_ERC20ContractAddress;
       const tokenSymbol = "D1G";
       const tokenDecimals = 18;
-      const tokenImage = 
-      "https://https://ipfs.io/ipfs/QmQq66d95Gcsr4q2FpPUpi2ShU1DDqkng348N7tnq4YuqLQmZ7ZNpQaqdsZP3R63r3hP9bbtSMMevGQWZ1WCaR5q2BsJ";
+      const tokenImage =
+        "https://https://ipfs.io/ipfs/QmQq66d95Gcsr4q2FpPUpi2ShU1DDqkng348N7tnq4YuqLQmZ7ZNpQaqdsZP3R63r3hP9bbtSMMevGQWZ1WCaR5q2BsJ";
       //"https://ipfs.io/ipfs/QmQq66d95Gcsr4q2FpPUpi2ShU1DDqkng348N7tnq4YuqL";
 
       try {
@@ -213,39 +213,37 @@ function App() {
       //var count = w3.eth.getTransactionCount(myAccount);
       //console.log(count);
 
-      var tD1G = new w3.eth.Contract(Token_ERC20,Token_ERC20ContractAddress);
+      var tD1G = new w3.eth.Contract(Token_ERC20, Token_ERC20ContractAddress);
       console.log(tD1G);
 
       const sentAmount = 10 * 10 ** 18;
       var value = web3.utils.toBN(sentAmount);
 
-      const createTransaction = await w3.eth.account,signTransaction(
+      var createTransaction = await w3.eth.accounts.signTransaction(
         {
-        // this could be provider.addresses[0] if it exists
-        from: myAccount, 
-        // target address, this could be a smart contract address
-        to: dstAccount, 
-        // optional if you want to specify the gas limit 
-        gasPrice: "0x09184e72a000",
-        gas: "0x5710", 
-        // optional if you are invoking say a payable function 
-        value: value,
-        // this encodes the ABI of the method and the arguements
-        data: tD1G.methods.transfer(dstAccount, value).encodeABI() 
+          // this could be provider.addresses[0] if it exists
+          from: myAccount,
+          // target address, this could be a smart contract address
+          to: dstAccount,
+          // optional if you want to specify the gas limit
+          gasPrice: "0x09184e72a000",
+          gas: "0x5710",
+          // optional if you are invoking say a payable function
+          value: value,
+          // this encodes the ABI of the method and the arguements
+          data: tD1G.methods.transfer(dstAccount, value).encodeABI()
         },
-        '4d37434318ee4fb5960da289b90e5f35aff0419a6d1d693eb2e4aea22cbc2372'
-        );
+        "4d37434318ee4fb5960da289b90e5f35aff0419a6d1d693eb2e4aea22cbc2372"
+      );
 
       // Deploy transaction
       const createReceipt = await w3.eth.sendSignedTransaction(
         createTransaction.rawTransaction
-        );
+      );
 
-        console.log(
-          'Transaction successful with hash: ${createReceipt.transactionHash}'
-        );
-
-
+      console.log(
+        "Transaction successful with hash: ${createReceipt.transactionHash}"
+      );
     } catch (error) {
       console.error(error);
     }
